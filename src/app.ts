@@ -1,9 +1,11 @@
-import express, { NextFunction, Request, Response } from 'express'
+import express, { Application, NextFunction, Request, Response } from 'express'
+import cors from 'cors'
 
-const app = express()
+const app:Application = express()
 
 app.use(express.json())
 app.use(express.text())
+app.use(cors())
 
 const logger=((req:Request,res:Response,next:NextFunction)=>{
     console.log('Logger');
