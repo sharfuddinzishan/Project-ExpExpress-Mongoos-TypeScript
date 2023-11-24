@@ -16,7 +16,7 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
   next()
 }
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', logger, (req: Request, res: Response) => {
   console.log('API Connected')
   res.send('Everything Worked Fine.')
 })
