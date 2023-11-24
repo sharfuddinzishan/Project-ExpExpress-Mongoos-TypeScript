@@ -6,6 +6,12 @@ const createStudentToDb = async (student: TStudent) => {
   return result
 }
 
+const getStudentsFromDb = async () => {
+  const result = await StudentModel.find()
+  return result
+}
+
 export const StudentServices = {
-  createStudentToDb
+  createStudentToDb,
+  getStudentsFromDb
 }
