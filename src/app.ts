@@ -9,14 +9,14 @@ app.use(express.text())
 app.use(cors())
 
 // Application Routes
-app.use('api/v1/students', StudentRouters)
+app.use('/api/v1/students', StudentRouters)
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
   console.log('Logger')
   next()
 }
 
-app.get('/', logger, (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   console.log('API Connected')
   res.send('Everything Worked Fine.')
 })
