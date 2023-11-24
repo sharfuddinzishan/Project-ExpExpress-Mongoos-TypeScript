@@ -33,6 +33,6 @@ export type TStudent = {
   permanentAddress: string
   guardian: TGuardian
   localGuardian?: TLocalGuardian
-  isActive: 'active' | 'inactive'
+  isActive: 'active' | 'blocked'
   profileImg?: string
 }
