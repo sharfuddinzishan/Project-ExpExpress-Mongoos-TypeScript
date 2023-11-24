@@ -11,7 +11,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.text());
 app.use((0, cors_1.default)());
 // Application Routes
-app.use('api/v1/students', student_route_1.StudentRouters);
+app.use('/api/v1/students', student_route_1.StudentRouters);
 const logger = (req, res, next) => {
     console.log('Logger');
     next();
