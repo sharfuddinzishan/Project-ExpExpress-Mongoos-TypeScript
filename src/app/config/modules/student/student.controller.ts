@@ -4,27 +4,44 @@ import { StudentServices } from './student.service'
 const createStudent = async (req: Request, res: Response) => {
   try {
     const { student: studentData } = req.body
+    // console.log('Controller ', studentData)
     const result = await StudentServices.createStudentToDb(studentData)
     res.status(200).json({
       success: true,
       message: 'Student Created Successfully',
       data: result
     })
-  } catch (err) {
-    console.log('Student Creation Failed')
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Student Creation Failed',
+      error
+    })
   }
 }
 
 const getStudents = async (req: Request, res: Response) => {
   try {
     const result = await StudentServices.getStudentsFromDb()
-    res.status(200).json({
-      success: true,
-      message: 'Students Data Retrieved Successfully',
-      data: result
+    if (result.length) {
+      res.status(200).json({
+        success: true,
+        message: 'Students Data Retrieved Successfully',
+        data: result
+      })
+    } else {
+      res.status(400).json({
+        success: false,
+        message: 'Students Data Retrieved Failed',
+        data: []
+      })
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Student Retrieved Failed',
+      error
     })
-  } catch (err) {
-    console.log('Student Retrieved Failed')
   }
 }
 
@@ -45,8 +62,12 @@ const getSingleStudent = async (req: Request, res: Response) => {
         data: {}
       })
     }
-  } catch (err) {
-    console.log('Student Retrieved By ID Failed')
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Student Retrieved by ID Failed',
+      error
+    })
   }
 }
 
