@@ -1,67 +1,25 @@
 import { Schema, model } from 'mongoose'
 import { TStudent } from './student.interface'
-import validator from 'validator'
 
 // Sub Schema of studentSchema
 const nameSchema = new Schema({
-  firstName: {
-    type: String,
-    required: [true, 'First Name Missing'],
-    minlength: [6, '{VALUE} Length is Less Than 6'],
-    maxlength: [30, '{VALUE} Length Exceed 30 Character Limit'],
-    validate: {
-      validator: function (val: string) {
-        const inputName = val.trim()
-        const CapitalizeFirst =
-          inputName.charAt(0).toUpperCase() + inputName.slice(1)
-        return inputName === CapitalizeFirst && validator.isAlpha(inputName)
-      },
-      message: 'Your Given [{VALUE}] is not valid. First Letter Must Capital.'
-    },
-    trim: true
-  },
+  firstName: { type: String },
   middleName: { type: String },
-  lastName: {
-    type: String,
-    required: [true, 'Last Name Missing'],
-    minlength: [1, 'First Name Length Must Not Be Zero'],
-    maxlength: [30, 'First Name Length Must Not Be More Than 30'],
-    trim: true
-  }
+  lastName: { type: String }
 })
 const guardianSchema = new Schema({
-  fatherName: {
-    type: String,
-    required: [true, 'Father Name Missing'],
-    trim: true
-  },
+  fatherName: { type: String },
   fatherOccupation: { type: String },
-  fatherContactNo: { type: String, required: [true, 'Father Contact Missing'] },
-  motherName: {
-    type: String,
-    required: [true, 'Mother Name Missing'],
-    trim: true
-  },
+  fatherContactNo: { type: String },
+  motherName: { type: String },
   motherOccupation: { type: String },
   motherContactNo: { type: String }
 })
 const localGuardianSchema = new Schema({
-  name: {
-    type: String,
-    validate: {
-      validator: function (val: string) {
-        return !validator.isEmpty(val)
-      },
-      message: 'Local Guardian Name Must Not Empty'
-    },
-    trim: true
-  },
+  name: { type: String },
   occupation: { type: String },
-  contactNo: {
-    type: String,
-    required: [true, 'Local Guardian Contact No Missing']
-  },
-  address: { type: String, required: [true, 'Local Guardian Address Missing'] }
+  contactNo: { type: String },
+  address: { type: String }
 })
 
 // studentSchema is an instance
@@ -69,7 +27,6 @@ const studentSchema = new Schema<TStudent>(
   {
     id: {
       type: String,
-      required: [true, 'Unique ID Must Be Provided'],
       unique: true
     },
     name: {
@@ -78,54 +35,15 @@ const studentSchema = new Schema<TStudent>(
     },
     email: {
       type: String,
-      required: [true, 'Unique Email Must Be Provided'],
-      unique: true,
-      lowercase: true,
-      trim: true,
-      validate: {
-        validator: function (val: string) {
-          return validator.isEmail(val.trim())
-        },
-        message: '[{VALUE}] is not a valid email address'
-      }
+      unique: true
     },
-    gender: {
-      type: String,
-      required: [true, 'Gender Must Be Provided'],
-      enum: {
-        values: ['Male', 'Female'],
-        message: 'Only Male or Female'
-      }
-    },
+    gender: { type: String },
     dateOfBirth: { type: String },
-    contactNo: {
-      type: String,
-      required: [true, 'Your Contact No Missing'],
-      min: [11, 'Contact Number Should Not Below 11 Digit'],
-      max: [14, 'Contact Number Should Not Above 14 Digit'],
-      trim: true
-    },
-    emergencyContactNo: {
-      type: String,
-      required: [true, 'Emergency Contact Missing'],
-      trim: true
-    },
-    //   Enum type Blood Group
-    bloodGroup: {
-      type: String,
-      enum: {
-        values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-        message: 'Given {VALUE} Blood Group Invalid )'
-      }
-    },
-    presentAddress: {
-      type: String,
-      required: [true, 'Present Address Missing']
-    },
-    permanentAddress: {
-      type: String,
-      required: [true, 'Permanent Address Missing']
-    },
+    contactNo: { type: String },
+    emergencyContactNo: { type: String },
+    bloodGroup: { type: String },
+    presentAddress: { type: String },
+    permanentAddress: { type: String },
     guardian: {
       type: guardianSchema,
       required: [true, 'Guardian Information Missing']
@@ -134,14 +52,7 @@ const studentSchema = new Schema<TStudent>(
       type: localGuardianSchema,
       required: [true, 'Local Guardian Information Missing']
     },
-    isActive: {
-      type: String,
-      enum: {
-        values: ['active', 'blocked'],
-        message: 'Status Active or Inactive only'
-      },
-      default: 'active'
-    },
+    isActive: { type: String },
     profileImg: { type: String }
   },
   { versionKey: false }
