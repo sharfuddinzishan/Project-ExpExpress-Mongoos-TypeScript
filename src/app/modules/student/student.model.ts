@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose'
 import {
+  StaticStudentModel,
   TGuardian,
   TLocalGuardian,
   TStudent,
@@ -28,7 +29,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 })
 
 // studentSchema is an instance
-const studentSchema = new Schema<TStudent>(
+const studentSchema = new Schema<TStudent, StaticStudentModel>(
   {
     id: {
       type: String,
@@ -63,6 +64,14 @@ const studentSchema = new Schema<TStudent>(
   { versionKey: false }
 )
 
+// Static Method
+studentSchema.statics.isExistStudentById = async function (id: string) {
+  const isExist = await StudentModel.findOne({ id })
+  console.log('Model ', isExist.id)
+  return isExist
+}
 // Student Model
-
-export const StudentModel = model<TStudent>('Student', studentSchema)
+export const StudentModel = model<TStudent, StaticStudentModel>(
+  'Student',
+  studentSchema
+)

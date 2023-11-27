@@ -1,3 +1,5 @@
+import { Model } from 'mongoose'
+
 export type TUserName = {
   firstName: string
   lastName: string
@@ -35,4 +37,9 @@ export type TStudent = {
   localGuardian?: TLocalGuardian
   isActive: 'active' | 'blocked'
   profileImg?: string
+}
+
+// Static Method
+export interface StaticStudentModel extends Model<TStudent> {
+  isExistStudentById(id: string): Promise<TStudent | null>
 }
