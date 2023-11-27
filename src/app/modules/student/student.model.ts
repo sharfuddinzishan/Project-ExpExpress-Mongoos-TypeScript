@@ -1,13 +1,18 @@
 import { Schema, model } from 'mongoose'
-import { TStudent } from './student.interface'
+import {
+  TGuardian,
+  TLocalGuardian,
+  TStudent,
+  TUserName
+} from './student.interface'
 
 // Sub Schema of studentSchema
-const nameSchema = new Schema({
+const nameSchema = new Schema<TUserName>({
   firstName: { type: String },
   middleName: { type: String },
   lastName: { type: String }
 })
-const guardianSchema = new Schema({
+const guardianSchema = new Schema<TGuardian>({
   fatherName: { type: String },
   fatherOccupation: { type: String },
   fatherContactNo: { type: String },
@@ -15,7 +20,7 @@ const guardianSchema = new Schema({
   motherOccupation: { type: String },
   motherContactNo: { type: String }
 })
-const localGuardianSchema = new Schema({
+const localGuardianSchema = new Schema<TLocalGuardian>({
   name: { type: String },
   occupation: { type: String },
   contactNo: { type: String },
