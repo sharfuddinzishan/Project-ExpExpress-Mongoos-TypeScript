@@ -9,7 +9,7 @@ async function main() {
       console.log(`port ${config.port} Listened Successfully`)
     })
   } catch (error) {
-    console.log('Database or Port Problem')
+    console.log('Database or Port Problem', error)
   }
 }
 
