@@ -1,6 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
 import cors from 'cors'
-import { StudentRouters } from './app/config/modules/student/student.route'
+import { StudentRouters } from './app/modules/student/student.route'
 
 const app: Application = express()
 
@@ -12,12 +12,12 @@ app.use(cors())
 app.use('/api/v1/students', StudentRouters)
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
-  console.log('Logger')
+  // console.log('Logger')
   next()
 }
 
 app.get('/', logger, (req: Request, res: Response) => {
-  console.log('API Connected')
+  // console.log('API Connected')
   res.send('Everything Worked Fine.')
 })
 
