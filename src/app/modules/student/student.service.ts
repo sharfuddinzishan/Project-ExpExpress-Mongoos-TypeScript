@@ -1,11 +1,12 @@
 import { TStudent } from './student.interface'
 import { StudentModel } from './student.model'
 
-const createStudentToDb = async (student: TStudent) => {
-  if (await StudentModel.isExistStudentById(student?.id)) {
+const createStudentToDb = async (student1: TStudent) => {
+  // console.log('Service createStudentToDb data ', student1)
+  if (await StudentModel.isExistStudentById(student1.id)) {
     throw new Error('User Exist')
   }
-  const result = await StudentModel.create(student)
+  const result = await StudentModel.create(student1)
   return result
 }
 
@@ -15,6 +16,7 @@ const getStudentsFromDb = async () => {
 }
 
 const getSingleStudentById = async (id: string) => {
+  console.log('Service getSingleStudentById id', id)
   const result = StudentModel.findOne({ id })
   return result
 }

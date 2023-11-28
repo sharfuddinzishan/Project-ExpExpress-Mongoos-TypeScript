@@ -5,7 +5,9 @@ import studentZodValidationSchema from './student.validator'
 const createStudent = async (req: Request, res: Response) => {
   try {
     const { student: studentData } = req.body
+    // console.log('Request Body ', req.body)
     const result = studentZodValidationSchema.safeParse(studentData)
+    // console.log('Parse Result ', result)
 
     if (result.success) {
       const student = await StudentServices.createStudentToDb(result.data)
@@ -22,6 +24,7 @@ const createStudent = async (req: Request, res: Response) => {
       })
     }
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       success: false,
       message: 'Student Creation Failed',
@@ -58,6 +61,7 @@ const getStudents = async (req: Request, res: Response) => {
 const getSingleStudent = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params
+    console.log(studentId)
     const result = await StudentServices.getSingleStudentById(studentId)
     if (result) {
       res.status(200).json({

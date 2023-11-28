@@ -1,4 +1,6 @@
 import { Schema, model } from 'mongoose'
+import bcrypt from 'bcrypt'
+
 import {
   StaticStudentModel,
   TGuardian,
@@ -6,6 +8,7 @@ import {
   TStudent,
   TUserName
 } from './student.interface'
+import config from '../../config'
 
 // Sub Schema of studentSchema
 const nameSchema = new Schema<TUserName>({
@@ -43,6 +46,8 @@ const studentSchema = new Schema<TStudent, StaticStudentModel>(
       type: String,
       unique: true
     },
+    password: { type: String },
+    confirmPassword: { type: String },
     gender: { type: String },
     dateOfBirth: { type: String },
     contactNo: { type: String },
@@ -67,9 +72,18 @@ const studentSchema = new Schema<TStudent, StaticStudentModel>(
 // Static Method
 studentSchema.statics.isExistStudentById = async function (id: string) {
   const isExist = await StudentModel.findOne({ id })
-  console.log('Model ', isExist.id)
   return isExist
 }
+
+studentSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  let student = this
+  const hash = await bcrypt.hashSync(student.password, Number(config.salt))
+  student.password = hash
+  student.confirmPassword = ''
+  next()
+})
+
 // Student Model
 export const StudentModel = model<TStudent, StaticStudentModel>(
   'Student',

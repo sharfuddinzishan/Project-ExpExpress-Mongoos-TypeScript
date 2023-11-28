@@ -56,6 +56,8 @@ const studentZodValidationSchema = z.object({
     .min(7, 'Email Should Be Valid & Unique')
     .toLowerCase()
     .trim(),
+  password: z.string(),
+  confirmPassword: z.string(),
   gender: z.enum(['male', 'female']),
   dateOfBirth: z.string(),
   contactNo: z
