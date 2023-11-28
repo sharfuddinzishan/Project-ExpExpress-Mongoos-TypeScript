@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { StudentServices } from './student.service'
 import studentZodValidationSchema from './student.validator'
+import { StudentModel } from './student.model'
 
 const createStudent = async (req: Request, res: Response) => {
   try {
@@ -61,7 +62,7 @@ const getStudents = async (req: Request, res: Response) => {
 const getSingleStudent = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params
-    console.log(studentId)
+    console.log('getSingleId ', studentId)
     const result = await StudentServices.getSingleStudentById(studentId)
     if (result) {
       res.status(200).json({
@@ -85,8 +86,35 @@ const getSingleStudent = async (req: Request, res: Response) => {
   }
 }
 
+const deleteStudent = async (req: Request, res: Response) => {
+  const studentId = req.params.studentId
+  try {
+    if (await StudentModel.isExistStudentById(studentId)) {
+      const result = await StudentServices.deleteStudentbyId(studentId)
+      if (result.modifiedCount) {
+        res.status(200).json({
+          success: true,
+          message: 'Student',
+          data: result
+        })
+      } else {
+        res.status(400).json({
+          success: false,
+          message: 'Deleted Failed'
+        })
+      }
+    }
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: err
+    })
+  }
+}
+
 export const StudentControllers = {
   createStudent,
   getStudents,
-  getSingleStudent
+  getSingleStudent,
+  deleteStudent
 }

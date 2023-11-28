@@ -18,10 +18,18 @@ const getStudentsFromDb = async () => {
 const getSingleStudentById = async (id: string) => {
   console.log('Service getSingleStudentById id', id)
   const result = StudentModel.findOne({ id })
+    .select('-password -confirmPassword')
+    .lean()
+  return result
+}
+
+const deleteStudentbyId = async (id: string) => {
+  const result = await StudentModel.updateOne({ id }, { isDeleted: true })
   return result
 }
 export const StudentServices = {
   createStudentToDb,
   getStudentsFromDb,
-  getSingleStudentById
+  getSingleStudentById,
+  deleteStudentbyId
 }

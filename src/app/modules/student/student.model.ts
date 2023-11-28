@@ -64,7 +64,8 @@ const studentSchema = new Schema<TStudent, StaticStudentModel>(
       required: [true, 'Local Guardian Information Missing']
     },
     isActive: { type: String },
-    profileImg: { type: String }
+    profileImg: { type: String },
+    isDeleted: { type: Boolean, default: false }
   },
   { versionKey: false }
 )
@@ -75,12 +76,24 @@ studentSchema.statics.isExistStudentById = async function (id: string) {
   return isExist
 }
 
+studentSchema.pre('find', function (next) {
+  const studentCollection = this
+  studentCollection.find({ isDeleted: { $ne: true } })
+  next()
+})
+
 studentSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   let student = this
   const hash = await bcrypt.hashSync(student.password, Number(config.salt))
   student.password = hash
   student.confirmPassword = ''
+  next()
+})
+
+studentSchema.post('save', function (docs, next) {
+  // console.log('Post Middleware ', docs)
+  docs.password = ''
   next()
 })
 
