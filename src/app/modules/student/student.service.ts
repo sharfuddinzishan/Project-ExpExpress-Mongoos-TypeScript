@@ -16,6 +16,7 @@ const getStudentsFromDb = async () => {
 }
 
 const getSingleStudentById = async (id: string) => {
+  // eslint-disable-next-line no-console
   console.log('Service getSingleStudentById id', id)
   const result = StudentModel.findOne({ id })
     .select('-password -confirmPassword')
