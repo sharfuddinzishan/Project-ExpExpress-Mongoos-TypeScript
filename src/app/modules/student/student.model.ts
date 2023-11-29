@@ -67,8 +67,17 @@ const studentSchema = new Schema<TStudent, StaticStudentModel>(
     profileImg: { type: String },
     isDeleted: { type: Boolean, default: false }
   },
-  { versionKey: false }
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    versionKey: false
+  }
 )
+
+// Virtuals
+studentSchema.virtual('fullName').get(function () {
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`
+})
 
 // Static Method
 studentSchema.statics.isExistStudentById = async function (id: string) {
@@ -77,13 +86,14 @@ studentSchema.statics.isExistStudentById = async function (id: string) {
 }
 
 studentSchema.pre('find', function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const studentCollection = this
   studentCollection.find({ isDeleted: { $ne: true } })
   next()
 })
 
 studentSchema.pre('save', async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  // eslint-disable-next-line @typescript-eslint/no-this-alias, prefer-const
   let student = this
   const hash = await bcrypt.hashSync(student.password, Number(config.salt))
   student.password = hash
