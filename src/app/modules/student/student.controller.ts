@@ -25,6 +25,7 @@ const createStudent = async (req: Request, res: Response) => {
       })
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log(error)
     res.status(500).json({
       success: false,
@@ -62,6 +63,7 @@ const getStudents = async (req: Request, res: Response) => {
 const getSingleStudent = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params
+    // eslint-disable-next-line no-console
     console.log('getSingleId ', studentId)
     const result = await StudentServices.getSingleStudentById(studentId)
     if (result) {

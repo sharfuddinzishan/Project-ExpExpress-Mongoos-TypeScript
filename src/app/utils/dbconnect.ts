@@ -7,8 +7,10 @@ export const dbconnect = async (): Promise<void> => {
       throw new Error('Database URL Not Found')
     }
     await mongoose.connect(config.db as string)
+    // eslint-disable-next-line no-console
     console.log('Database Connected')
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log('Database Coonect Problem: ', error)
   }
 }
