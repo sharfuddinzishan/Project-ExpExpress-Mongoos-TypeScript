@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose'
-import bcrypt from 'bcrypt'
 
 import {
   StaticStudentModel,
@@ -8,7 +7,6 @@ import {
   TStudent,
   TUserName
 } from './student.interface'
-import config from '../../config'
 
 // Sub Schema of studentSchema
 const nameSchema = new Schema<TUserName>({
@@ -38,6 +36,12 @@ const studentSchema = new Schema<TStudent, StaticStudentModel>(
       type: String,
       unique: true
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'Unique User ID Must Be Required'],
+      unique: true,
+      ref: 'User'
+    },
     name: {
       type: nameSchema,
       required: [true, 'Name Must Be Provided']
@@ -46,8 +50,6 @@ const studentSchema = new Schema<TStudent, StaticStudentModel>(
       type: String,
       unique: true
     },
-    password: { type: String },
-    confirmPassword: { type: String },
     gender: { type: String },
     dateOfBirth: { type: String },
     contactNo: { type: String },
@@ -63,7 +65,6 @@ const studentSchema = new Schema<TStudent, StaticStudentModel>(
       type: localGuardianSchema,
       required: [true, 'Local Guardian Information Missing']
     },
-    isActive: { type: String },
     profileImg: { type: String },
     isDeleted: { type: Boolean, default: false }
   },
@@ -89,21 +90,6 @@ studentSchema.pre('find', function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const studentCollection = this
   studentCollection.find({ isDeleted: { $ne: true } })
-  next()
-})
-
-studentSchema.pre('save', async function (next) {
-  // eslint-disable-next-line @typescript-eslint/no-this-alias, prefer-const
-  let student = this
-  const hash = await bcrypt.hashSync(student.password, Number(config.salt))
-  student.password = hash
-  student.confirmPassword = ''
-  next()
-})
-
-studentSchema.post('save', function (docs, next) {
-  // console.log('Post Middleware ', docs)
-  docs.password = ''
   next()
 })
 

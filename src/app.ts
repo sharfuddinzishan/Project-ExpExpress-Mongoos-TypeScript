@@ -2,6 +2,8 @@ import express, { Application, NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import { StudentRouters } from './app/modules/student/student.route'
 import { dbconnect } from './app/utils/dbconnect'
+import { UserRouters } from './app/modules/user/user.router'
+import globalErrorHandler from './app/modules/middlewares/globalErrorHandler'
 
 const app: Application = express()
 
@@ -15,6 +17,7 @@ dbconnect()
 
 // Application Routes
 app.use('/api/v1/students', StudentRouters)
+app.use('/api/v1/users', UserRouters)
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
   // console.log('Logger')
@@ -34,5 +37,7 @@ app.all('**', (req: Request, res: Response) => {
     success: false
   })
 })
+
+app.use(globalErrorHandler)
 
 export default app
