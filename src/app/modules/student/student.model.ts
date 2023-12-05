@@ -9,25 +9,34 @@ import {
 } from './student.interface'
 
 // Sub Schema of studentSchema
-const nameSchema = new Schema<TUserName>({
-  firstName: { type: String },
-  middleName: { type: String },
-  lastName: { type: String }
-})
-const guardianSchema = new Schema<TGuardian>({
-  fatherName: { type: String },
-  fatherOccupation: { type: String },
-  fatherContactNo: { type: String },
-  motherName: { type: String },
-  motherOccupation: { type: String },
-  motherContactNo: { type: String }
-})
-const localGuardianSchema = new Schema<TLocalGuardian>({
-  name: { type: String },
-  occupation: { type: String },
-  contactNo: { type: String },
-  address: { type: String }
-})
+const nameSchema = new Schema<TUserName>(
+  {
+    firstName: { type: String },
+    middleName: { type: String },
+    lastName: { type: String }
+  },
+  { versionKey: false }
+)
+const guardianSchema = new Schema<TGuardian>(
+  {
+    fatherName: { type: String },
+    fatherOccupation: { type: String },
+    fatherContactNo: { type: String },
+    motherName: { type: String },
+    motherOccupation: { type: String },
+    motherContactNo: { type: String }
+  },
+  { versionKey: false }
+)
+const localGuardianSchema = new Schema<TLocalGuardian>(
+  {
+    name: { type: String },
+    occupation: { type: String },
+    contactNo: { type: String },
+    address: { type: String }
+  },
+  { versionKey: false }
+)
 
 // studentSchema is an instance
 const studentSchema = new Schema<TStudent, StaticStudentModel>(

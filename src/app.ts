@@ -1,9 +1,9 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
 import cors from 'cors'
-import { StudentRouters } from './app/modules/student/student.route'
 import { dbconnect } from './app/utils/dbconnect'
-import { UserRouters } from './app/modules/user/user.router'
 import globalErrorHandler from './app/modules/middlewares/globalErrorHandler'
+import notFound from './app/modules/middlewares/notFound'
+import router from './app/modules/routes'
 
 const app: Application = express()
 
@@ -16,8 +16,7 @@ app.use(cors())
 dbconnect()
 
 // Application Routes
-app.use('/api/v1/students', StudentRouters)
-app.use('/api/v1/users', UserRouters)
+app.use('/api/v1', router)
 
 const logger = (req: Request, res: Response, next: NextFunction) => {
   // console.log('Logger')
@@ -31,13 +30,14 @@ app.get('/', logger, (req: Request, res: Response) => {
   })
 })
 
-app.all('**', (req: Request, res: Response) => {
-  res.status(400).json({
-    message: 'No Such Link Exist',
-    success: false
-  })
-})
+// app.all('**', (req: Request, res: Response) => {
+//   res.status(400).json({
+//     message: 'No Such Link Exist',
+//     success: false
+//   })
+// })
 
 app.use(globalErrorHandler)
+app.use(notFound)
 
 export default app

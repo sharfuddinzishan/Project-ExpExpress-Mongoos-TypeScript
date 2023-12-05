@@ -1,5 +1,5 @@
 import app from './app'
-import config from './app/config'
+import config from './app/config/config'
 
 const bootstrap = () => {
   try {
